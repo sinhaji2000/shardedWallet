@@ -54,10 +54,30 @@ public class CreditDestinationWalletStep implements SagaStep{
 
     @Override
     public boolean compensate(SagaContext context) {
-        log.info("Compensating CreditDestinationWalletStep");
-        // Implement logic to reverse the credit operation if needed
-        // For example, retrieve the destination wallet and revert the balance update 
-        return true; // Return true if compensation is successful, false otherwise
+
+        // step 1 :- get the destination wallet id from the context
+        Long toWalletId = context.getLong("toWalletId");
+
+        BigDecimal amount = context.getBigDecimal("amount");
+        log.info("Compensating CreditDestinationWalletStep - toWalletId: {}, amount: {}", toWalletId, amount);
+
+        // step 2 :- fetch the destination wallet form the database with a lock to
+        // prevent concurrent updates
+        Wallet wallet = walletRepository.findByIdWithLock(toWalletId)
+                .orElseThrow(() -> new RuntimeException("Destination wallet not found with id: " + toWalletId));
+
+        log.info("wallet fetch with balance : {}", wallet.getBalance());
+
+        // step 3 :- credit the amount to the destination wallet
+        wallet.debit(amount);
+        walletRepository.save(wallet); // save the updated wallet back to the database
+        log.info("Wallet with saved balance {}", wallet.getBalance());
+        context.put("destinationWalletBalanceAfterCompensation", wallet.getBalance()); // store the balance after the
+                                                                                       // update in the context for
+                                                                                       // compensation if needed
+
+        log.info("Compensation completed for CreditDestinationWalletStep for wallet id: {}", toWalletId);
+        return true; // Return true if successful, false otherwise
     }
 
     @Override
