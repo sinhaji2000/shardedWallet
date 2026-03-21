@@ -7,6 +7,7 @@ import org.quoraapp.wallet.service.saga.SagaContext;
 import org.quoraapp.wallet.service.saga.SagaStep;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class UpdateTransactionStatus implements SagaStep {
     private final TransactionalReposotory transactionalReposotory;
 
     @Override
+    @Transactional
     public boolean execute(SagaContext context) {
         // Implement logic to update the transaction status in the database
         // For example, retrieve the transaction id from the context and update its status to "COMPLETED"
@@ -42,24 +44,24 @@ public class UpdateTransactionStatus implements SagaStep {
     }
 
     @Override
+    @Transactional
     public boolean compensate(SagaContext context) {
         // Implement logic to revert the transaction status update in case of compensation
         // For example, retrieve the transaction id from the context and update its status back to "PENDING"
 
         Long transactionId = context.getLong("transactionId");
+        TransactionStatus originalStatus = TransactionStatus.valueOf(context.getString("OriginalTransactionStatus"));
         log.info("Compensating transaction status update for transaction id: {}", transactionId);
         Transaction transaction = transactionalReposotory.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("Transaction not found with id: " + transactionId));
-        
-        context.put("TransactionStatusBeforeCompensation", transaction.getStatus()); // Store status before compensation
 
-        transaction.setStatus(TransactionStatus.PENDING); // Revert to PENDING or original status as needed
+
+        transaction.setStatus(originalStatus); // Revert to original status as needed
 
         transactionalReposotory.save(transaction); // Save the reverted transaction status
 
-        log.info("Transaction status reverted to PENDING for transaction id: {}", transactionId);
-        
-        context.put("TransactionStatusAfterCompensation", transaction.getStatus()); // Store status after compensation
+        log.info("Transaction status reverted to {} for transaction id: {}", originalStatus, transactionId);
+
         return true; // Return true if successful, false otherwise
     }
 
