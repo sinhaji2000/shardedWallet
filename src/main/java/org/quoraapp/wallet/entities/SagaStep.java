@@ -1,15 +1,15 @@
 package org.quoraapp.wallet.entities;
 
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SagaStep {
     
 
@@ -31,7 +32,7 @@ public class SagaStep {
     private String stepName ;
 
     @Column(name = "status" , nullable = false)
-    private SagaStatus status ;
+    private StepStatus status;
 
     @Column(name = "step_data" , columnDefinition = "json")
     private String stepData ;

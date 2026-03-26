@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 import org.quoraapp.wallet.entities.Wallet;
 import org.quoraapp.wallet.repositories.WalletRepository;
 import org.quoraapp.wallet.service.saga.SagaContext;
-import org.quoraapp.wallet.service.saga.SagaStep;
+import org.quoraapp.wallet.service.saga.SagaStepInterface;
+import org.quoraapp.wallet.service.saga.step.SagaStepFactory.SagaStepType;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -15,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CreditDestinationWalletStep implements SagaStep{
+public class CreditDestinationWalletStep implements SagaStepInterface {
     
     private final WalletRepository walletRepository ;
 
@@ -83,7 +84,7 @@ public class CreditDestinationWalletStep implements SagaStep{
 
     @Override
     public String getStepName() {
-        return "CreditDestinationWalletStep";
+        return SagaStepType.CREDIT_DESTINATION_WALLET_STEP.toString();
     }
 
 

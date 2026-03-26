@@ -4,7 +4,8 @@ import org.quoraapp.wallet.entities.Transaction;
 import org.quoraapp.wallet.entities.TransactionStatus;
 import org.quoraapp.wallet.repositories.TransactionalReposotory;
 import org.quoraapp.wallet.service.saga.SagaContext;
-import org.quoraapp.wallet.service.saga.SagaStep;
+import org.quoraapp.wallet.service.saga.SagaStepInterface;
+import org.quoraapp.wallet.service.saga.step.SagaStepFactory.SagaStepType;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -14,9 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-
 @Slf4j
-public class UpdateTransactionStatus implements SagaStep {
+public class UpdateTransactionStatusStep implements SagaStepInterface {
 
     private final TransactionalReposotory transactionalReposotory;
 
@@ -67,7 +67,7 @@ public class UpdateTransactionStatus implements SagaStep {
 
     @Override
     public String getStepName() {
-        return "UpdateTransactionStatus";   
+        return SagaStepType.UPDATE_TRANSACTION_STATUS.toString();
     }
     
 

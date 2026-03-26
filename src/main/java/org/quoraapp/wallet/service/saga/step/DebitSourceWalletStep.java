@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 import org.quoraapp.wallet.entities.Wallet;
 import org.quoraapp.wallet.repositories.WalletRepository;
 import org.quoraapp.wallet.service.saga.SagaContext;
-import org.quoraapp.wallet.service.saga.SagaStep;
+import org.quoraapp.wallet.service.saga.SagaStepInterface;
+import org.quoraapp.wallet.service.saga.step.SagaStepFactory.SagaStepType;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class DebitSourceWalletStep implements SagaStep {
+public class DebitSourceWalletStep implements SagaStepInterface {
 
     private final WalletRepository walletRepository ;
 
@@ -74,7 +75,7 @@ public class DebitSourceWalletStep implements SagaStep {
 
     public String getStepName(){
 
-        return "DebitSourceWalletStep";
+        return SagaStepType.DEBIT_SOURCE_WALLET_STEP.toString();
     }
     
 }
