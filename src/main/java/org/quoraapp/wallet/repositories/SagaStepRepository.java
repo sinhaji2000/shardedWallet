@@ -1,6 +1,7 @@
 package org.quoraapp.wallet.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.quoraapp.wallet.entities.SagaStep;
 import org.quoraapp.wallet.entities.StepStatus;
@@ -22,4 +23,7 @@ public interface SagaStepRepository extends JpaRepository<SagaStep, Long> {
     List<SagaStep>findCompletedOrCompensatedSagaStepsBySagaInstanceId(@Param("sagaInstanceId")  Long sagaInstanceId);
 
     List<SagaStep> findBySagaInstanceIdAndStatus(Long sagaInstanceId, StepStatus status);
+
+    Optional<SagaStep> findBySagaInstanceIdAndStepNameAndStatus(Long sagaInstanceId, String stepName,
+            StepStatus status);
 }

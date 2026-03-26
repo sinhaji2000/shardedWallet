@@ -47,4 +47,28 @@ public class SagaInstance {
     private String currentStep ;
 
 
+    public void markAsStarted() {
+        this.status = SagaStatus.COMPLETED;
+    }
+
+    public void markAsRunning() {
+        this.status = SagaStatus.RUNNING;
+    }
+
+    public void markAsCompleted() {
+        this.status = SagaStatus.COMPLETED;
+    }
+
+    public void markAsFailed() {
+        this.status = SagaStatus.FAILED;
+    }
+
+    public void markAsCompensating() {
+        this.status = SagaStatus.COMPENSATING;
+    }
+
+    public void markAsCompensated() {
+        this.status = SagaStatus.COMPENSATED;
+    }
+
 }
