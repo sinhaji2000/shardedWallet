@@ -1,5 +1,6 @@
 package org.quoraapp.wallet.service.saga.step;
 
+import java.util.List;
 import java.util.Map;
 
 import org.quoraapp.wallet.service.saga.SagaStepInterface;
@@ -17,6 +18,11 @@ public class SagaStepFactory {
         CREDIT_DESTINATION_WALLET_STEP,
         UPDATE_TRANSACTION_STATUS
     }
+
+    public static final List<SagaStepType> TransferMoneySagaSteps = List.of(
+            SagaStepFactory.SagaStepType.DEBIT_SOURCE_WALLET_STEP,
+            SagaStepFactory.SagaStepType.CREDIT_DESTINATION_WALLET_STEP,
+            SagaStepFactory.SagaStepType.UPDATE_TRANSACTION_STATUS);
 
     public  SagaStepInterface getSagaStep(String stepName){
 

@@ -58,4 +58,10 @@ public class TransactionalService {
     public List<Transaction> getTransactionByStatus(TransactionStatus status){
         return transactionalReposotory.findByStatus(status);
     }
+
+    public void updateTransactionWithSagaInstanceId(Long transactionId, Long sagaInstanceId) {
+        Transaction transaction = getTransactionById(transactionId);
+        transaction.setSagaInstanceId(sagaInstanceId);
+        transactionalReposotory.save(transaction);
+    }
 }
