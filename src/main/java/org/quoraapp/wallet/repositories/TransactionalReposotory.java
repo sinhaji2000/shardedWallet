@@ -1,9 +1,10 @@
 package org.quoraapp.wallet.repositories;
 import org.quoraapp.wallet.entities.Transaction;
+import org.quoraapp.wallet.entities.TransactionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.TransactionStatus;
+
 
 import java.util.List;
 
@@ -24,5 +25,6 @@ public interface TransactionalReposotory extends JpaRepository<Transaction, Long
     List<Transaction>findByStatus(TransactionStatus status);
 
     List<Transaction> findBySagaInstanceId(Long sagaInstanceId);
+
 
 } 
