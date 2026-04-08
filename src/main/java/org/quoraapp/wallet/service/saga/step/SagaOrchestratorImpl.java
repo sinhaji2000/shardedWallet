@@ -69,18 +69,7 @@ public class SagaOrchestratorImpl implements SagaOrchestrator {
             throw new RuntimeException("SagaStep not found with name: " + stepName);
         }
 
-        // SagaStep sagaStepDB =
-        // sagaStepRepository.findBySagaInstanceIdAndStatus(sagaInstanceId,
-        // StepStatus.PENDING)
-        // .stream()
-        // .filter(s -> s.getStepName().equals(stepName))
-        // .findFirst()
-        // .orElse(SagaStep.builder()
-        // .sagaInstanceId(sagaInstanceId)
-        // .stepName(stepName)
-        // .status(StepStatus.PENDING)
-        // .build()
-        // );
+
 
         SagaStep sagaStepDB = sagaStepRepository
                 .findBySagaInstanceIdAndStepNameAndStatus(sagaInstanceId, stepName, StepStatus.PENDING)
@@ -211,7 +200,8 @@ public class SagaOrchestratorImpl implements SagaOrchestrator {
         sagaInstance.markAsCompensating(); // update the status of the SagaInstance to compensating
         sagaInstanceRepository.save(sagaInstance); // update the SagaInstance in the database with the new status
 
-        List<SagaStep> completedSteps = sagaStepRepository.findCompletedSagaStepsBySagaInstanceId(sagaInstanceId);
+        List<SagaStep> completedSteps = sagaStepRepository.findBySagaInstanceIdAndStatus(sagaInstanceId,
+                StepStatus.COMPLETED);
 
         boolean allCompensated = true;
         for (SagaStep competedStep : completedSteps) {

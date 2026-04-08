@@ -30,8 +30,45 @@ rules:
           column: id
           keyGeneratorName: snowflakestrategy
     
-    # broadcastTables:
-    #   - flyway_schema_history
+      wallet:
+        actualDataNodes: shardwallet$->{1..2}.wallet
+        databaseStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: db-inline
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflakestrategy
+      
+      transaction:
+        actualDataNodes: shardwallet$->{1..2}.transaction
+        databaseStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: db-inline
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflakestrategy
+      
+      saga_instance:
+        actualDataNodes: shardwallet$->{1..2}.saga_instance
+        databaseStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: db-inline
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflakestrategy
+
+      saga_step:
+        actualDataNodes: shardwallet$->{1..2}.saga_step
+        databaseStrategy:
+          standard:
+            shardingColumn: id
+            shardingAlgorithmName: db-inline
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflakestrategy
 
     defaultDatabaseStrategy:
       standard:
