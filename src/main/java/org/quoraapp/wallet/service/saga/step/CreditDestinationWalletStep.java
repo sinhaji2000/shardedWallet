@@ -44,11 +44,14 @@ public class CreditDestinationWalletStep implements SagaStepInterface {
         
 
          // step 3 :- credit the amount to the destination wallet
-         wallet.credit(amount);
-            walletRepository.save(wallet) ; // save the updated wallet back to the database
+         walletRepository.updateBalanceByUserId(toWalletId, wallet.getBalance().add(amount)); // save the updated wallet
+                                                                                              // back to the database
         log.info("Wallet with saved balance {}" , wallet.getBalance());
         context.put("destinationWalletBalanceAfterCredit", wallet.getBalance()) ; // store the balance after the update in the context for compensation if needed
 
+        // TODO :- once the context is updated in memory we need to update tha context
+        // in the database as well so that it can be used by the compensation method if
+        // needed
        
         return true; // Return true if successful, false otherwise      
     }
@@ -71,12 +74,17 @@ public class CreditDestinationWalletStep implements SagaStepInterface {
         log.info("wallet fetch with balance : {}", wallet.getBalance());
 
         // step 3 :- credit the amount to the destination wallet
-        wallet.debit(amount);
-        walletRepository.save(wallet); // save the updated wallet back to the database
+        walletRepository.updateBalanceByUserId(toWalletId, wallet.getBalance().subtract(amount)); // save the updated
+                                                                                                  // wallet back to the
+                                                                                                  // database
         log.info("Wallet with saved balance {}", wallet.getBalance());
         context.put("destinationWalletBalanceAfterCompensation", wallet.getBalance()); // store the balance after the
                                                                                        // update in the context for
                                                                                        // compensation if needed
+
+        // TODO :- once the context is updated in memory we need to update tha context
+        // in the database as well so that it can be used by the compensation method if
+        // needed
 
         log.info("Compensation completed for CreditDestinationWalletStep for wallet id: {}", toWalletId);
         return true; // Return true if successful, false otherwise

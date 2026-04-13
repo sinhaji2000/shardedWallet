@@ -1,12 +1,12 @@
 package org.quoraapp.wallet.entities;
 
-import java.lang.annotation.ElementType;
+
 
 import org.apache.calcite.model.JsonType;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
-import groovy.transform.Generated;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -72,3 +72,4 @@ public class SagaInstance {
     }
 
 }
+

@@ -30,8 +30,8 @@ public class SagaContext {
 
         Object value = data.get(key) ;
 
-        if(value instanceof Long){
-            return (Long) value ;
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
         } 
 
         return null ;
@@ -39,8 +39,8 @@ public class SagaContext {
 
     public BigDecimal getBigDecimal(String key) {
         Object value = data.get(key);
-        if (value instanceof BigDecimal) {
-            return (BigDecimal) value;
+        if (value instanceof Number) {
+            return new BigDecimal(value.toString());
         }
         return null;
     }

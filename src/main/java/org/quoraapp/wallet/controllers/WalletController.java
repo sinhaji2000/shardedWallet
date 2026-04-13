@@ -70,13 +70,13 @@ public class WalletController {
         }
     }
 
-    @PostMapping("/{id}/debit")
-    public ResponseEntity<Wallet> debitWallet(@PathVariable Long id, @RequestBody DebitWalletRequestDTO request) {
+    @PostMapping("/{userId}/debit")
+    public ResponseEntity<Wallet> debitWallet(@PathVariable Long userId, @RequestBody DebitWalletRequestDTO request) {
         //TODO: process POST request
         
         try{
-            walletService.debit(id, request.getAmount());
-            Wallet wallet = walletService.getWalletById(id);
+            walletService.debit(userId, request.getAmount());
+            Wallet wallet = walletService.getWalletByUserId(userId);
             return ResponseEntity.ok(wallet);
         }catch(Exception e){
             log.error("Error debiting wallet: {}", e.getMessage());
@@ -84,13 +84,13 @@ public class WalletController {
         }
     }
 
-    @PostMapping("/{id}/credit")
-    public ResponseEntity<Wallet> creditWallet(@PathVariable Long id, @RequestBody CreditwalletRequestDTO request) {
+    @PostMapping("/{userId}/credit")
+    public ResponseEntity<Wallet> creditWallet(@PathVariable Long userId, @RequestBody CreditwalletRequestDTO request) {
         //TODO: process POST request
 
         try{
-            walletService.credit(id, request.getAmount());
-            Wallet wallet = walletService.getWalletById(id);
+            walletService.credit(userId, request.getAmount());
+            Wallet wallet = walletService.getWalletByUserId(userId);
             return ResponseEntity.ok(wallet);
         }catch(Exception e){
             log.error("Error crediting wallet: {}", e.getMessage());

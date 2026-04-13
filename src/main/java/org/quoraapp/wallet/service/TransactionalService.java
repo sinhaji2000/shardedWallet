@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.quoraapp.wallet.entities.Transaction;
 import org.quoraapp.wallet.entities.TransactionStatus;
+import org.quoraapp.wallet.entities.TransactionType;
 import org.quoraapp.wallet.repositories.TransactionalReposotory;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,8 @@ public class TransactionalService {
                 .toWalletId(toWalletId)
                 .amount(amaount)
                 .description(description)
+                .status(TransactionStatus.PENDING)
+                .type(TransactionType.TRANSFER)
                 .build();
 
         Transaction savedTransaction =  transactionalReposotory.save(transaction);

@@ -34,29 +34,31 @@ public class WalletService {
         return walletRepository.findById(id).orElseThrow(() -> new RuntimeException("Wallet not found with id: " + id));
     }
 
-    public List<Wallet>getWalletByUserId(Long userId){
-        return walletRepository.findByUserId(userId);
+    public Wallet getWalletByUserId(Long userId) {
+        return walletRepository.findByUserId(userId).get(0);
+    }
+
+    // public List<Wallet>getWalletByUserId(Long userId){
+    // return walletRepository.findByUserId(userId);
+    // }
+
+    @Transactional
+    public void debit(Long userId, BigDecimal amount) {
+        log.info("Debiting amount {} from wallet {}", amount, userId);
+        Wallet wallet = getWalletByUserId(userId);
+        walletRepository.updateBalanceByUserId(userId, wallet.getBalance().subtract(amount));
+        log.info("Amount {} debited from wallet {}", amount, userId);
     }
 
     @Transactional
-    public void debit(Long walletId , BigDecimal amount){
-        log.info("Debiting amount {} from wallet {}", amount, walletId);
-        Wallet wallet = getWalletById(walletId);
-        wallet.debit(amount);
-        walletRepository.save(wallet);
-        log.info("Amount {} debited from wallet {}", amount, walletId);
-    }
-
-    @Transactional
-    public void credit(Long walletId , BigDecimal amount){
-        log.info("Crediting amount {} to wallet {}", amount, walletId);
-        Wallet wallet = getWalletById(walletId);
-        wallet.credit(amount);
-        walletRepository.save(wallet);
-        log.info("Amount {} credited to wallet {}", amount, walletId);
+    public void credit(Long userId, BigDecimal amount) {
+        log.info("Crediting amount {} to wallet {}", amount, userId);
+        Wallet wallet = getWalletByUserId(userId);
+        walletRepository.updateBalanceByUserId(userId, wallet.getBalance().add(amount));
+        log.info("Amount {} credited to wallet {}", amount, wallet.getId());
     }   
 
-    public BigDecimal getBalance(Long walletId){
+    public BigDecimal getBalance(Long walletId) {
         log.info("Getting balance for wallet {}", walletId);
         return getWalletById(walletId).getBalance();
     }

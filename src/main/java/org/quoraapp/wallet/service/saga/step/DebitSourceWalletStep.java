@@ -31,14 +31,21 @@ public class DebitSourceWalletStep implements SagaStepInterface {
 
         log.info("wallet fetch with balance : {}", wallet.getBalance());
         context.put("originalSourceWalletBalance", wallet.getBalance()) ;
+        // TODO :- once the context is updated in memory we need to update tha context
+        // in the database as well so that it can be used by the compensation method if
+        // needed
         
         // we  already cheaked in wallet entity is suffcient balnace or not so there is no sence to check here again in the step but if you want to check here also you can uncomment the below code
         // if(!wallet.isSufficientBalance(amount)){
         //     throw new RuntimeException("Insufficient balance in source wallet with id: " + fromWalletId);
         // }
 
-        wallet.debit(amount);
-        walletRepository.save(wallet) ; // save the updated wallet back to the database
+        walletRepository.updateBalanceByUserId(fromWalletId, wallet.getBalance().subtract(amount)); // debit the amount
+                                                                                                    // from the source
+                                                                                                    // wallet and save
+                                                                                                    // the updated
+                                                                                                    // wallet back to
+                                                                                                    // the database
         log.info("Wallet with saved balance {}" , wallet.getBalance());
         context.put("sourceWalletBalanceAfterDebit", wallet.getBalance()) ; // store the balance
                 
@@ -61,10 +68,15 @@ public class DebitSourceWalletStep implements SagaStepInterface {
                 
         log.info("wallet fetch with balance : {}", wallet.getBalance());
         context.put("sourceWalletBalanceBeforeCompensation", wallet.getBalance()) ; // store the balance before compensation in the context for reference
+        // TODO :- once the context is updated in memory we need to update tha context
+        // in the database as well so that it can be used by the compensation method if
+        // needed
 
 
-        wallet.credit(amount); // compensate by crediting the amount back to the source wallet
-        walletRepository.save(wallet) ; // save the updated wallet back to the database
+        walletRepository.updateBalanceByUserId(fromWalletId, wallet.getBalance().add(amount)); // compensate by
+                                                                                               // crediting the amount
+                                                                                               // back to the source
+                                                                                               // wallet
         log.info("Wallet with saved balance {}" , wallet.getBalance());
         context.put("sourceWalletBalanceAfterCompensation", wallet.getBalance()) ; // store the balance after compensation in the context for reference
         

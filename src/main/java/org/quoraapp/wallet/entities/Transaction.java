@@ -40,11 +40,11 @@ public class Transaction {
     
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status" , nullable = false)
+    @Column(name = "status")
     private TransactionStatus status = TransactionStatus.PENDING; // PENDING, COMPLETED, FAILED
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "transactional_type" , nullable = false)
+    @Column(name = "transactional_type")
     private TransactionType type = TransactionType.TRANSFER; // DEBIT, DEPOSIT, WITHDRAWAL
 
     @Column(name = "description")
